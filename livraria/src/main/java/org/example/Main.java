@@ -1,17 +1,49 @@
 package org.example;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    static void main() {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        IO.println(String.format("Hello and welcome!"));
+import org.example.frete.PAC;
+import org.example.frete.RetiradaLoja;
+import org.example.frete.SEDEX;
+import org.example.model.Pedido;
+import org.example.model.Produto;
+import org.example.service.CalculadoraFrete;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            IO.println("i = " + i);
+public class Main {
+
+    public static void main(String[] args) {
+
+        Produto livro1 = new Produto("Clean Code", 0.6, 120);
+        Produto livro2 = new Produto("Refactoring", 0.8, 150);
+
+        Pedido pedido = new Pedido();
+        pedido.adicionarProduto(livro1);
+        pedido.adicionarProduto(livro2);
+
+        System.out.println("===== PEDIDO =====");
+        System.out.println("Peso total: " + pedido.getPesoTotal() + " kg");
+        System.out.println("Valor total: R$ " + pedido.getValorTotal());
+
+        CalculadoraFrete calculadora = new CalculadoraFrete();
+
+        System.out.println("\n===== FRETES =====");
+
+        // PAC
+        try {
+            double fretePAC = calculadora.calcular(pedido, new PAC());
+            System.out.println("PAC: R$ " + fretePAC);
+        } catch (IllegalArgumentException e) {
+            System.out.println("PAC: " + e.getMessage());
         }
+
+        // SEDEX
+        try {
+            double freteSEDEX = calculadora.calcular(pedido, new SEDEX());
+            System.out.println("SEDEX: R$ " + freteSEDEX);
+        } catch (IllegalArgumentException e) {
+            System.out.println("SEDEX: " + e.getMessage());
+        }
+
+        // Retirada
+        double retirada = calculadora.calcular(pedido, new RetiradaLoja());
+        System.out.println("Retirada na loja: R$ " + retirada);
     }
 }
