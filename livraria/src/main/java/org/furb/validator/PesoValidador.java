@@ -7,7 +7,7 @@ public class PesoValidador implements Validador<Double> {
             throw new IllegalArgumentException("Peso não pode ser igual a 0 ou negativo");
         }
 
-        if (peso == null) {
+        if (peso.equals(null)) {
             throw new IllegalArgumentException("Peso é obrigatorio");
         }
     }

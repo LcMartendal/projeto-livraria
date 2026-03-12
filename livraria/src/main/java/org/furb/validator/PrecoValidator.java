@@ -7,7 +7,7 @@ public class PrecoValidator implements Validador<Double> {
             throw new IllegalArgumentException("Preço não pode ser igual ou menor que 0");
         }
 
-        if (preco == null) {
+        if (preco.equals(null)) {
             throw new IllegalArgumentException("Preço é obrigatorio");
         }
     }
