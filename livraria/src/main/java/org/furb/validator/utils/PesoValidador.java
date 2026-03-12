@@ -1,7 +1,6 @@
-package org.furb.validator;
+package org.furb.validator.utils;
 
-public class PesoValidador implements Validador<Double> {
-    @Override
+public class PesoValidador  {
     public void validar(Double peso) {
         if (peso <= 0) {
             throw new IllegalArgumentException("Peso não pode ser igual a 0 ou negativo");

@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@DisplayName("Testes do ProdutoValidator")
-class ProdutoValidatorTest {
+import org.furb.validator.utils.NomeValidator;
 
-    private final ProdutoValidator validator = new ProdutoValidator();
+@DisplayName("Testes do ProdutoValidator")
+class NomeValidatorTest {
+
+    private final NomeValidator validator = new NomeValidator();
 
     @Nested
     @DisplayName("Validação de nomes válidos")

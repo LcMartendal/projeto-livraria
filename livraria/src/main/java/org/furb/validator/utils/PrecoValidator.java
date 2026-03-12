@@ -1,7 +1,6 @@
-package org.furb.validator;
+package org.furb.validator.utils;
 
-public class PrecoValidator implements Validador<Double> {
-    @Override
+public class PrecoValidator {
     public void validar(Double preco) {
         if (preco <= 0) {
             throw new IllegalArgumentException("Preço não pode ser igual ou menor que 0");

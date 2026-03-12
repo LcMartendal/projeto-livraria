@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.furb.validator.utils.PrecoValidator;
+
 @DisplayName("Testes do PrecoValidator")
 class PrecoValidatorTest {
 
