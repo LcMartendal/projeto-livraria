@@ -2,9 +2,9 @@ package org.example;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.example.frete.PAC;
+import org.example.frete.PACFrete;
 import org.example.frete.RetiradaLoja;
-import org.example.frete.SEDEX;
+import org.example.frete.SEDEXFrete;
 import org.example.model.Pedido;
 import org.example.model.Produto;
 import org.example.service.CalculadoraFrete;
@@ -25,7 +25,7 @@ public class CalculadoraFreteTest {
         Pedido pedido = criarPedido(1);
 
         CalculadoraFrete calc = new CalculadoraFrete();
-        double frete = calc.calcular(pedido, new PAC());
+        double frete = calc.calcular(pedido, new PACFrete());
 
         assertEquals(10.0, frete);
     }
@@ -36,7 +36,7 @@ public class CalculadoraFreteTest {
         Pedido pedido = criarPedido(2);
 
         CalculadoraFrete calc = new CalculadoraFrete();
-        double frete = calc.calcular(pedido, new PAC());
+        double frete = calc.calcular(pedido, new PACFrete());
 
         assertEquals(15.0, frete);
     }
@@ -49,7 +49,7 @@ public class CalculadoraFreteTest {
         CalculadoraFrete calc = new CalculadoraFrete();
 
         assertThrows(IllegalArgumentException.class, () -> {
-            calc.calcular(pedido, new PAC());
+            calc.calcular(pedido, new PACFrete());
         });
     }
 
@@ -60,7 +60,7 @@ public class CalculadoraFreteTest {
         Pedido pedido = criarPedido(0.5);
 
         CalculadoraFrete calc = new CalculadoraFrete();
-        double frete = calc.calcular(pedido, new SEDEX());
+        double frete = calc.calcular(pedido, new SEDEXFrete());
 
         assertEquals(12.5, frete);
     }
@@ -71,7 +71,7 @@ public class CalculadoraFreteTest {
         Pedido pedido = criarPedido(1);
 
         CalculadoraFrete calc = new CalculadoraFrete();
-        double frete = calc.calcular(pedido, new SEDEX());
+        double frete = calc.calcular(pedido, new SEDEXFrete());
 
         assertEquals(20.0, frete);
     }
@@ -82,7 +82,7 @@ public class CalculadoraFreteTest {
         Pedido pedido = criarPedido(1.2);
 
         CalculadoraFrete calc = new CalculadoraFrete();
-        double frete = calc.calcular(pedido, new SEDEX());
+        double frete = calc.calcular(pedido, new SEDEXFrete());
 
         assertEquals(49.5, frete);
     }
@@ -133,19 +133,14 @@ public class CalculadoraFreteTest {
     }
 
     @Test
-    void devePermitirPesoZero() {
-
-        Produto produto = new Produto("Livro leve", 0, 10);
-
-        assertEquals(0, produto.getPeso());
+    void naoDevePermitirPesoZero() {
+        assertThrows(IllegalArgumentException.class, () -> new Produto("Livro leve", 0, 10));
     }
 
     @Test
-    void devePermitirPrecoZero() {
+    void naoDevePermitirPrecoZero() {
 
-        Produto produto = new Produto("Brinde", 1, 0);
-
-        assertEquals(0, produto.getPreco());
+        assertThrows(IllegalArgumentException.class, () -> new Produto("Livro leve", 1, 0));
     }
 
 }

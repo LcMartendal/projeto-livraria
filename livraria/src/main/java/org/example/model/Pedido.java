@@ -4,30 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Pedido {
-
-    private List<Produto> produtos = new ArrayList<>();
+    private final List<Produto> produtos = new ArrayList<>();
 
     public void adicionarProduto(Produto produto) {
         produtos.add(produto);
     }
 
+    public void removerProduto(Produto produto) {
+        produtos.remove(produto);
+    }
+
     public double getPesoTotal() {
-        double peso = 0;
-
-        for (Produto p : produtos) {
-            peso += p.getPeso();
-        }
-
-        return peso;
+        return calculaPesoTotalDoPedido();
     }
 
     public double getValorTotal() {
-        double valor = 0;
+        return calculaValorTotalDoPedido();
+    }
 
-        for (Produto p : produtos) {
-            valor += p.getPreco();
-        }
+    public List<Produto> getProdutos() {
+        return produtos;
+    }
 
-        return valor;
+    /**
+     * Usando o stream para mapear o objeto para double pegando o peso do produto
+     * e por fim usando o sum para somar     * 
+     * @return A soma do peso de todos produtos do pedido
+     */
+    private double calculaPesoTotalDoPedido() {
+        return produtos.stream().mapToDouble(Produto::getPeso).sum();
+    }
+
+    /**
+     * Usando o stream para mapear o objeto para double pegando o preço do produto
+     * e por fim usando o sum para somar
+     * @return A soma do preço de todos produtos do pedido
+     */
+    private double calculaValorTotalDoPedido() {
+        return produtos.stream().mapToDouble(Produto::getPreco).sum();
     }
 }

@@ -2,8 +2,7 @@ package org.example.frete;
 
 import org.example.model.Pedido;
 
-public class PAC implements TipoFrete {
-
+public class PACFrete implements TipoFrete {
     @Override
     public double calcularFrete(Pedido pedido) {
 
