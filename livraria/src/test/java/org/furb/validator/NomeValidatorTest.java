@@ -57,17 +57,19 @@ class NomeValidatorTest {
     class BoundaryCases {
 
         @Test
-        @DisplayName("Aceita string vazia (comportamento atual)")
-        void aceitaStringVazia() {
+        @DisplayName("Não aceita string vazia (comportamento atual)")
+        void naoAceitaStringVazia() {
 
-            assertDoesNotThrow(() -> validator.validar(""));
+            assertThrows(IllegalArgumentException.class,
+                    () -> validator.validar(""));
         }
 
         @Test
-        @DisplayName("Aceita apenas espaços (comportamento atual)")
-        void aceitaApenasEspacos() {
+        @DisplayName("Não aceita apenas espaços (comportamento atual)")
+        void naoAceitaApenasEspacos() {
 
-            assertDoesNotThrow(() -> validator.validar("   "));
+            assertThrows(IllegalArgumentException.class,
+                    () -> validator.validar("   "));
         }
     }
 
@@ -76,11 +78,10 @@ class NomeValidatorTest {
     class RobustezSeguranca {
 
         @Test
-        @DisplayName("Aceita caracteres especiais")
-        void aceitaCaracteresEspeciais() {
+        @DisplayName("Não deve aceitar caracteres especiais")
+        void naoDeveaceitarCaracteresEspeciais() {
 
-            assertDoesNotThrow(() ->
-                    validator.validar("@#$% Livro *&^%"));
+            assertThrows(IllegalArgumentException.class, () -> validator.validar("@#$% Livro *&^%"));
         }
 
         @Test
@@ -97,8 +98,7 @@ class NomeValidatorTest {
         void validacaoRepetida() {
 
             for (int i = 0; i < 1000; i++) {
-                assertDoesNotThrow(() ->
-                        validator.validar("Livro"));
+                assertDoesNotThrow(() -> validator.validar("Livro"));
             }
         }
     }
