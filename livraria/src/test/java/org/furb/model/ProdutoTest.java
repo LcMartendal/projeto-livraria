@@ -1,4 +1,4 @@
-package org.example.model;
+package org.furb.model;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

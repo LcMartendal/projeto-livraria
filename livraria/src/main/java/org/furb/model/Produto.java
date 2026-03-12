@@ -1,9 +1,9 @@
-package org.example.model;
+package org.furb.model;
 
-import org.example.validator.PesoValidador;
-import org.example.validator.PrecoValidator;
-import org.example.validator.ProdutoValidator;
-import org.example.validator.Validador;
+import org.furb.validator.PesoValidador;
+import org.furb.validator.PrecoValidator;
+import org.furb.validator.ProdutoValidator;
+import org.furb.validator.Validador;
 
 public class Produto {
     private String nome;

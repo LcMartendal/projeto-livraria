@@ -1,10 +1,10 @@
-package org.example.frete;
+package org.furb.frete;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.example.model.Pedido;
-import org.example.model.Produto;
+import org.furb.model.Pedido;
+import org.furb.model.Produto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 

@@ -1,7 +1,7 @@
-package org.example.service;
+package org.furb.service;
 
-import org.example.frete.TipoFrete;
-import org.example.model.Pedido;
+import org.furb.frete.TipoFrete;
+import org.furb.model.Pedido;
 
 public class CalculadoraFrete {
 

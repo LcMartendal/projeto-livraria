@@ -1,4 +1,4 @@
-package org.example.validator;
+package org.furb.validator;
 
 public class PrecoValidator implements Validador<Double> {
     @Override

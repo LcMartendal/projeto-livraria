@@ -1,6 +1,6 @@
-package org.example.frete;
+package org.furb.frete;
 
-import org.example.model.Pedido;
+import org.furb.model.Pedido;
 
 public class PACFrete implements TipoFrete {
     @Override

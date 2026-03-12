@@ -1,4 +1,4 @@
-package org.example.validator;
+package org.furb.validator;
 
 public class ProdutoValidator implements Validador<String> {
 

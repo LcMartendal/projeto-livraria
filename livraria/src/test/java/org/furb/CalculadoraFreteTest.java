@@ -1,13 +1,13 @@
-package org.example;
+package org.furb;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import org.example.frete.PACFrete;
-import org.example.frete.RetiradaLoja;
-import org.example.frete.SEDEXFrete;
-import org.example.model.Pedido;
-import org.example.model.Produto;
-import org.example.service.CalculadoraFrete;
+import org.furb.frete.PACFrete;
+import org.furb.frete.RetiradaLoja;
+import org.furb.frete.SEDEXFrete;
+import org.furb.model.Pedido;
+import org.furb.model.Produto;
+import org.furb.service.CalculadoraFrete;
 import org.junit.jupiter.api.Test;
 
 public class CalculadoraFreteTest {

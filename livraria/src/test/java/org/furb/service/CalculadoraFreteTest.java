@@ -1,16 +1,17 @@
-package org.example.service;
+package org.furb.service;
 
-import org.example.frete.TipoFrete;
-import org.example.frete.PACFrete;
-import org.example.frete.SEDEXFrete;
-import org.example.frete.RetiradaLoja;
-import org.example.model.Pedido;
-import org.example.model.Produto;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+
+import org.furb.frete.PACFrete;
+import org.furb.frete.RetiradaLoja;
+import org.furb.frete.SEDEXFrete;
+import org.furb.frete.TipoFrete;
+import org.furb.model.Pedido;
+import org.furb.model.Produto;
 
 @DisplayName("Testes da classe CalculadoraFrete")
 class CalculadoraFreteTest {
