@@ -1,4 +1,6 @@
-package br.furb.models;
+package br.furb.services;
+
+import br.furb.models.Acao;
 
 import java.util.HashMap;
 import java.util.Map;
