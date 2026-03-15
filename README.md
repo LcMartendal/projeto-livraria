@@ -222,9 +222,9 @@ Este projeto foi desenvolvido para praticar conceitos de:
 
 ---
 
-# 👨‍💻 Autor
+# 👨‍💻 Autores
 
-Projeto desenvolvido para a disciplina de **Engenharia / Qualidade de Software**.
+Projeto desenvolvido para a disciplina de **Analise de Algoritmos**.
 
 **Alunos:**
 Luiz C. Martendal
