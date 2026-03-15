@@ -1,204 +1,241 @@
-# 📚 Sistema de Cálculo de Frete - Livraria
+# 📈 Sistema Simplificado de Bolsa de Valores
 
-![Java](https://img.shields.io/badge/Java-19-orange)
-![Maven](https://img.shields.io/badge/Maven-Build-blue)
-![JUnit](https://img.shields.io/badge/JUnit-5-green)
-![Status](https://img.shields.io/badge/status-concluído-success)
+Projeto desenvolvido para simular o funcionamento básico de uma **Bolsa de Valores**, permitindo o registro de **ordens de compra e venda de ações**, execução de **matching de ordens** e **notificação de investidores** quando ocorre negociação.
 
-Sistema desenvolvido para uma **livraria que deseja iniciar suas vendas pela internet**, permitindo calcular automaticamente o **valor do frete de pedidos** com base no **peso total dos produtos** e na **modalidade de entrega escolhida**.
-
-O projeto foi desenvolvido aplicando **boas práticas de engenharia de software**, arquitetura limpa e testes automatizados.
+O projeto foi desenvolvido em **Java**, utilizando boas práticas de **orientação a objetos**, separação em **camadas de domínio e serviço**, além de possuir **testes automatizados com JUnit 5 e Mockito**.
 
 ---
 
-# 🎯 Objetivo do Projeto
+# 🧠 Conceito do Sistema
 
-Criar um sistema que permita ao dono da livraria calcular o valor do frete de um pedido contendo diversos produtos, considerando diferentes modalidades de entrega.
+O sistema simula um **mercado de ações simplificado**.
 
-Além disso, o projeto busca demonstrar:
+Investidores podem registrar ordens de:
 
-- aplicação de **Clean Code**
-- princípios **SOLID**
-- uso de **Design Patterns**
-- criação de **testes unitários**
-- organização de **arquitetura de software**
+* 📉 **Venda**
+* 📈 **Compra**
 
----
-
-# 🏗 Arquitetura do Sistema
-
-O sistema foi estruturado em camadas para garantir **baixo acoplamento e alta coesão**.
-
-```
-src
-├── main
-│ └── java
-│ └── org.example
-│ ├── model
-│ │ ├── Produto
-│ │ └── Pedido
-│ │
-│ ├── frete
-│ │ ├── TipoFrete
-│ │ ├── PACFrete
-│ │ ├── SedexFrete
-│ │ └── RetiradaLojaFrete
-│ │
-│ ├── service
-│ │ └── CalculadoraFrete
-│ │
-│ └── validator
-│ ├── Validador<T>
-│ ├── ProdutoValidator
-│ ├── PesoValidator
-│ └── PrecoValidator
-│
-└── test
-└── java
-└── org.example
-└── testes unitários
-```
+Quando uma **ordem de compra e uma ordem de venda possuem o mesmo valor**, ocorre um **match** (negociação), atualizando o valor da ação e notificando os investidores que estão observando essa ação.
 
 ---
 
-# 🧠 Padrões de Projeto Utilizados
+# 🏗️ Arquitetura do Projeto
 
-## Strategy Pattern
+O sistema está dividido em dois pacotes principais:
 
-O cálculo do frete utiliza o **Strategy Pattern**, permitindo que cada tipo de frete possua sua própria regra de cálculo.
+```
+br.furb
+ ├── models
+ │    ├── Acao
+ │    ├── Ordem
+ │    ├── UsuarioInvestidor
+ │    └── enums
+ │         └── TipoOrdem
+ │
+ └── services
+      ├── BolsaDeValoresService
+      ├── MatchingService
+      └── NotificacaoService
+```
 
-Isso permite **adicionar novos tipos de frete sem modificar o código existente**, seguindo o princípio **Open/Closed (SOLID)**.
+## 📦 Models (Domínio)
 
-Exemplo da interface:
+Representam as entidades principais do sistema.
 
-```java
-public interface TipoFrete {
-    double calcular(double pesoTotal);
-}
+### `Acao`
+
+Representa uma ação negociada na bolsa.
+
+Responsabilidades:
+
+* armazenar ordens de compra e venda
+* manter valor atual da ação
+* gerenciar investidores observadores
+* controlar prioridade das ordens usando `PriorityQueue`
+
+Regras:
+
+* **Compra → maior valor tem prioridade**
+* **Venda → menor valor tem prioridade**
+
+---
+
+### `Ordem`
+
+Representa uma ordem de negociação.
+
+Contém:
+
+* investidor responsável
+* tipo da ordem (COMPRA ou VENDA)
+* valor da ordem
+
+---
+
+### `UsuarioInvestidor`
+
+Representa um usuário que participa do mercado.
+
+Responsabilidades:
+
+* receber notificações quando o valor da ação muda
+
+---
+
+### `TipoOrdem`
+
+Enumeração que define:
+
+```
+COMPRA
+VENDA
 ```
 
 ---
 
-# 📦 Regras de Cálculo de Frete
+# ⚙️ Camada de Serviços
 
-## 🚚 PAC
+## `BolsaDeValoresService`
 
-Peso do Pedido Valor
-Até 1kg R$ 10,00
-1kg a 2kg R$ 15,00
-Acima de 2kg Não permitido
+Responsável por:
 
-## ⚡ SEDEX
+* registrar ações
+* registrar ordens
+* encaminhar ordens para processamento de matching
 
-Peso do Pedido Valor
-Até 500g R$ 12,50
-500g a 1kg R$ 20,00
-Acima de 1kg R$ 46,50 + R$ 1,50 para cada 100g adicional
+---
 
-## 🏪 Retirada na Loja
+## `MatchingService`
 
-Tipo Valor
-Retirada no local Grátis
+Implementa a **lógica de negociação de mercado**.
 
-# 🔎 Validação de Dados
+Algoritmo:
 
-## O projeto utiliza uma interface genérica de validação para garantir reutilização e consistência nas regras de validação.
+1. verifica melhor compra
+2. verifica melhor venda
+3. se valores forem iguais → ocorre negociação
+4. remove ordens executadas
+5. atualiza valor da ação
+6. dispara notificações
 
-```java
-public interface Validador<T> {
-    void validar(T valor);
-}
+---
+
+## `NotificacaoService`
+
+Responsável por notificar todos os investidores que estão observando a ação.
+
+Exemplo de notificação:
+
 ```
-
-## Implementações:
-
-```java
-ProdutoValidator
-PesoValidator
-PrecoValidator
+Carlos foi notificado: PETR4 agora vale 50
 ```
-
-Essa abordagem permite criar novas validações sem alterar o código existente.
 
 ---
 
 # 🧪 Testes Automatizados
 
-O sistema possui testes unitários utilizando JUnit 5.
+O projeto possui **testes automatizados utilizando:**
 
-Os testes seguem boas práticas de organização:
+* **JUnit 5**
+* **Mockito**
+* **Testes Black-box**
+* **Estrutura com @Nested e @DisplayName**
 
-@Nested para agrupar cenários
+Estratégia de testes:
 
-@DisplayName para documentação dos testes
-
-cobertura de múltiplos cenários
-
-## Tipos de testes realizados
-
-Casos válidos
-
-Casos inválidos
-
-Boundary values
-
-Testes de robustez
-
-Testes de segurança de entrada
-
-### Exemplo de teste:
-
-```java
-@Nested
-@DisplayName("Validação de nome do produto")
-class ProdutoValidatorTest {
-
-    @Test
-    @DisplayName("Deve lançar exceção quando nome for nulo")
-    void deveFalharQuandoNomeForNulo() {
-        assertThrows(IllegalArgumentException.class,
-            () -> validator.validar(null));
-    }
-
-}
-```
+* cenários positivos
+* cenários negativos
+* edge cases
+* validação de regras de prioridade
+* validação de múltiplos matches
 
 ---
 
-# ⚙️ Tecnologias Utilizadas
-## Tecnologia	Descrição
+# 📊 Cobertura de Testes
 
-Java 19	          Linguagem principal
-Maven	          Gerenciamento de dependências
-JUnit 5	          Framework de testes
+Cobertura média obtida:
+
+```
+97% – 100%
+```
+
+Cobertura por classe:
+
+| Classe                | Cobertura |
+| --------------------- | --------- |
+| Acao                  | ~98%      |
+| Ordem                 | 100%      |
+| UsuarioInvestidor     | ~95%      |
+| BolsaDeValoresService | ~95%      |
+| MatchingService       | ~100%     |
+| NotificacaoService    | ~100%     |
 
 ---
 
 # ▶️ Como Executar o Projeto
-Pré-requisitos
 
-Java 19 ou superior
+## 1️⃣ Clonar repositório
 
-Maven
+```
+git clone <url-do-repositorio>
+```
 
-### Compilar o projeto
+---
+
+## 2️⃣ Compilar projeto
+
+Se estiver usando **Maven**:
+
 ```
 mvn clean install
 ```
 
-### Executar os testes
+---
+
+## 3️⃣ Executar testes
+
 ```
 mvn test
 ```
 
 ---
 
-# 👨‍💻 Autores
+# 🧩 Tecnologias Utilizadas
 
+* Java
+* Maven
+* JUnit 5
+* Mockito
+
+---
+
+# 🎯 Objetivo Acadêmico
+
+Este projeto foi desenvolvido para praticar conceitos de:
+
+* orientação a objetos
+* estruturação de domínio
+* design de serviços
+* testes automatizados
+* qualidade de software
+* cobertura de testes
+
+---
+
+# 👨‍💻 Autor
+
+Projeto desenvolvido para a disciplina de **Engenharia / Qualidade de Software**.
+
+**Alunos:**
 Luiz C. Martendal
-
 Fabian Formento
-
 Lucas Visconti
 
-Estudantes de Ciência da Computação — FURB
+**Universidade:**
+FURB – Universidade Regional de Blumenau
+
+---
+
+# 📄 Licença
+
+Este projeto é apenas para fins **educacionais e acadêmicos**.
