@@ -8,6 +8,8 @@ import org.mockito.Mockito;
 
 import java.math.BigDecimal;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
 class NotificacaoServiceTest {
 
     @Test
@@ -32,5 +34,18 @@ class NotificacaoServiceTest {
 
         Mockito.verify(investidor2)
                 .notificar("PETR4", new BigDecimal("20"));
+    }
+
+    @Test
+    @DisplayName("Não deve falhar quando não há investidores registrados")
+    void naoDeveFalharSemInvestidores() {
+
+        NotificacaoService service = new NotificacaoService();
+
+        Acao acao = new Acao("PETR4", new BigDecimal("20"));
+
+        assertDoesNotThrow(() ->
+                service.notificar(acao)
+        );
     }
 }

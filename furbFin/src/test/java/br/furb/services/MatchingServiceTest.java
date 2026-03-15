@@ -2,7 +2,6 @@ package br.furb.services;
 
 import br.furb.models.Acao;
 import br.furb.models.Ordem;
-import br.furb.models.UsuarioInvestidor;
 import br.furb.models.enums.TipoOrdem;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -22,13 +21,13 @@ class MatchingServiceTest {
         Acao acao = new Acao("PETR4", new BigDecimal("10"));
 
         Ordem compra = new Ordem(
-                new UsuarioInvestidor("A"),
+                "A",
                 TipoOrdem.COMPRA,
                 new BigDecimal("50")
         );
 
         Ordem venda = new Ordem(
-                new UsuarioInvestidor("B"),
+                "B",
                 TipoOrdem.VENDA,
                 new BigDecimal("50")
         );
@@ -51,16 +50,55 @@ class MatchingServiceTest {
         Acao acao = new Acao("PETR4", new BigDecimal("10"));
 
         acao.adicionarCompra(
-                new Ordem(new UsuarioInvestidor("A"), TipoOrdem.COMPRA, new BigDecimal("50"))
+                new Ordem("A", TipoOrdem.COMPRA, new BigDecimal("50"))
         );
 
         acao.adicionarVenda(
-                new Ordem(new UsuarioInvestidor("B"), TipoOrdem.VENDA, new BigDecimal("60"))
+                new Ordem("B", TipoOrdem.VENDA, new BigDecimal("60"))
         );
 
         service.processar(acao);
 
         assertTrue(acao.temCompras());
         assertTrue(acao.temVendas());
+    }
+
+    @Test
+    @DisplayName("Deve executar múltiplos matches consecutivos")
+    void deveExecutarMultiplosMatches() {
+
+        MatchingService service = new MatchingService();
+
+        Acao acao = new Acao("VALE3", new BigDecimal("10"));
+
+        acao.adicionarCompra(new Ordem(
+                "A",
+                TipoOrdem.COMPRA,
+                new BigDecimal("50")
+        ));
+
+        acao.adicionarCompra(new Ordem(
+                "B",
+                TipoOrdem.COMPRA,
+                new BigDecimal("40")
+        ));
+
+        acao.adicionarVenda(new Ordem(
+                "C",
+                TipoOrdem.VENDA,
+                new BigDecimal("50")
+        ));
+
+        acao.adicionarVenda(new Ordem(
+               "D",
+                TipoOrdem.VENDA,
+                new BigDecimal("40")
+        ));
+
+        service.processar(acao);
+
+        assertFalse(acao.temCompras());
+        assertFalse(acao.temVendas());
+        assertEquals(new BigDecimal("40"), acao.getValorAtual());
     }
 }

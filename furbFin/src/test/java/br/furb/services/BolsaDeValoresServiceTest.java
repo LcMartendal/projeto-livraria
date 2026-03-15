@@ -27,7 +27,7 @@ class BolsaDeValoresServiceTest {
             bolsa.adicionarAcao(acao);
 
             Ordem ordem = new Ordem(
-                    new UsuarioInvestidor("Ana"),
+                    "Ana",
                     TipoOrdem.COMPRA,
                     new BigDecimal("20")
             );
@@ -43,7 +43,7 @@ class BolsaDeValoresServiceTest {
             BolsaDeValoresService bolsa = new BolsaDeValoresService();
 
             Ordem ordem = new Ordem(
-                    new UsuarioInvestidor("Ana"),
+                    "Ana",
                     TipoOrdem.COMPRA,
                     new BigDecimal("20")
             );

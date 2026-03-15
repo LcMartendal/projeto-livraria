@@ -23,7 +23,7 @@ class AcaoTest {
             Acao acao = new Acao("PETR4", new BigDecimal("10"));
 
             Ordem ordem = new Ordem(
-                    new UsuarioInvestidor("Ana"),
+                    "Ana",
                     TipoOrdem.COMPRA,
                     new BigDecimal("20")
             );
@@ -41,7 +41,7 @@ class AcaoTest {
             Acao acao = new Acao("PETR4", new BigDecimal("10"));
 
             Ordem ordem = new Ordem(
-                    new UsuarioInvestidor("Ana"),
+                    "Ana",
                     TipoOrdem.VENDA,
                     new BigDecimal("20")
             );
@@ -63,7 +63,7 @@ class AcaoTest {
             Acao acao = new Acao("PETR4", new BigDecimal("10"));
 
             Ordem ordem = new Ordem(
-                    new UsuarioInvestidor("Ana"),
+                    "Ana",
                     TipoOrdem.COMPRA,
                     new BigDecimal("30")
             );
@@ -82,7 +82,7 @@ class AcaoTest {
             Acao acao = new Acao("PETR4", new BigDecimal("10"));
 
             Ordem ordem = new Ordem(
-                    new UsuarioInvestidor("Ana"),
+                    "Ana",
                     TipoOrdem.VENDA,
                     new BigDecimal("30")
             );

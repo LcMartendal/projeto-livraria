@@ -23,8 +23,9 @@ public class Acao {
         );
 
         vendas = new PriorityQueue<>(
-                Comparator.comparing(Ordem::getValor)
+                (o1, o2) -> o2.getValor().compareTo(o1.getValor())
         );
+
     }
 
     public void adicionarCompra(Ordem ordem) {

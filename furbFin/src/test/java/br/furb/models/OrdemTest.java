@@ -14,15 +14,13 @@ class OrdemTest {
     @Test
     void deveCriarOrdemCorretamente() {
 
-        UsuarioInvestidor investidor = new UsuarioInvestidor("João");
-
         Ordem ordem = new Ordem(
-                investidor,
+                "joao",
                 TipoOrdem.COMPRA,
                 new BigDecimal("50")
         );
 
-        assertEquals(investidor, ordem.getInvestidor());
+        assertEquals("joao", ordem.getInvestidor().getNome());
         assertEquals(TipoOrdem.COMPRA, ordem.getTipoOrdem());
         assertEquals(new BigDecimal("50"), ordem.getValor());
     }
