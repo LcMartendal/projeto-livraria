@@ -1,37 +1,35 @@
 package br.furb.services;
 
+import br.furb.models.Acao;
 import br.furb.models.Ordem;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.PriorityQueue;
 
-public class AcaoMatcherService {
+public class MatchingService {
 
     private final NotificacaoService notificacaoService;
 
-    public AcaoMatcherService() {
+    public MatchingService() {
         this.notificacaoService = new NotificacaoService();
     }
 
-    public void executarMatch(
-            PriorityQueue<Ordem> compras,
-            PriorityQueue<Ordem> vendas,
-            BigDecimal valorAtualAcao
-    ) {
-        while (!compras.isEmpty() && !vendas.isEmpty()) {
+    public void processar(Acao acao) {
 
-            Ordem melhorCompra = compras.peek();
-            Ordem melhorVenda = vendas.peek();
+        while (acao.temCompras() && acao.temVendas()) {
+
+            Ordem melhorCompra = acao.melhorCompra();
+            Ordem melhorVenda = acao.melhorVenda();
 
             if (melhorCompra.getValor().compareTo(melhorVenda.getValor()) == 0) {
 
-                valorAtualAcao = melhorVenda.getValor();
+                BigDecimal novoValor = melhorVenda.getValor();
 
-                compras.poll();
-                vendas.poll();
+                acao.setValorAtual(novoValor);
 
-                notificacaoService.notificarInvestidores();
+                acao.removerMelhorCompra();
+                acao.removerMelhorVenda();
+
+                notificacaoService.notificar(acao);
 
             } else {
                 break;

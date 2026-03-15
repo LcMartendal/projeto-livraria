@@ -1,17 +1,38 @@
 package br;
 
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import br.furb.models.Acao;
+import br.furb.models.Ordem;
+import br.furb.models.UsuarioInvestidor;
+import br.furb.models.enums.TipoOrdem;
+import br.furb.services.BolsaDeValoresService;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+import java.math.BigDecimal;
+
+public class Main {
+
+    public static void main(String[] args) {
+
+        BolsaDeValoresService bolsa =
+                new BolsaDeValoresService();
+
+        Acao bb = new Acao("BBAS3", new BigDecimal("23.50"));
+
+        bolsa.adicionarAcao(bb);
+
+        UsuarioInvestidor mariana = new UsuarioInvestidor("Mariana");
+        UsuarioInvestidor joaquim = new UsuarioInvestidor("Joaquim");
+
+        bb.registrarInvestidor(mariana);
+        bb.registrarInvestidor(joaquim);
+
+        bolsa.registrarOrdem(
+                "BBAS3",
+                new Ordem("Mariana", TipoOrdem.VENDA, new BigDecimal("24"))
+        );
+
+        bolsa.registrarOrdem(
+                "BBAS3",
+                new Ordem("Joaquim", TipoOrdem.COMPRA, new BigDecimal("24"))
+        );
     }
 }

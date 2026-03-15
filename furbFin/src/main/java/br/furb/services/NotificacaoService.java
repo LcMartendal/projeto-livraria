@@ -1,16 +1,19 @@
 package br.furb.services;
 
-import java.math.BigDecimal;
+import br.furb.models.Acao;
+import br.furb.models.UsuarioInvestidor;
 
 public class NotificacaoService {
-    public void notificarInvestidores(
-            String acao,
-            BigDecimal novoValor,
-            String nomeInvestidor
-    ) {
-        System.out.println(
-                nomeInvestidor + " foi notificado: " +
-                        acao + " agora vale " + novoValor
-        );
+
+    public void notificar(Acao acao) {
+
+        for (UsuarioInvestidor investidor : acao.getObservadores()) {
+
+            investidor.notificar(
+                    acao.getNome(),
+                    acao.getValorAtual()
+            );
+        }
     }
 }
+

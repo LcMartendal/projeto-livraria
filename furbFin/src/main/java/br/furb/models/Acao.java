@@ -1,35 +1,66 @@
 package br.furb.models;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Acao {
+
     private String nome;
     private BigDecimal valorAtual;
 
-    private List<Ordem> ordens = new ArrayList<>();
-    private List<UsuarioInvestidor> investidoresObservadores = new ArrayList<>();
+    private PriorityQueue<Ordem> compras;
+    private PriorityQueue<Ordem> vendas;
 
-    public Acao(String nome, BigDecimal valorAtual) {
+    private List<UsuarioInvestidor> observadores = new ArrayList<>();
+
+    public Acao(String nome, BigDecimal valorInicial) {
+
         this.nome = nome;
-        this.valorAtual = valorAtual;
+        this.valorAtual = valorInicial;
+
+        compras = new PriorityQueue<>(
+                (o1, o2) -> o2.getValor().compareTo(o1.getValor())
+        );
+
+        vendas = new PriorityQueue<>(
+                Comparator.comparing(Ordem::getValor)
+        );
+    }
+
+    public void adicionarCompra(Ordem ordem) {
+        compras.add(ordem);
+    }
+
+    public void adicionarVenda(Ordem ordem) {
+        vendas.add(ordem);
+    }
+
+    public Ordem melhorCompra() {
+        return compras.peek();
+    }
+
+    public Ordem melhorVenda() {
+        return vendas.peek();
+    }
+
+    public Ordem removerMelhorCompra() {
+        return compras.poll();
+    }
+
+    public Ordem removerMelhorVenda() {
+        return vendas.poll();
+    }
+
+    public boolean temCompras() {
+        return !compras.isEmpty();
+    }
+
+    public boolean temVendas() {
+        return !vendas.isEmpty();
     }
 
     public void registrarInvestidor(UsuarioInvestidor investidor) {
-        investidoresObservadores.add(investidor);
-    }
-
-    public void adicionarOrdem(Ordem ordem) {
-        ordens.add(ordem);
-        verificarMatch();
-    }
-
-    private void notificarInvestidores() {
-
-        for (Investidor inv : observadores) {
-            inv.notificar(nome, valorAtual);
-        }
+        observadores.add(investidor);
     }
 
     public String getNome() {
@@ -40,7 +71,11 @@ public class Acao {
         return valorAtual;
     }
 
-    public List<UsuarioInvestidor> getInvestidoresObservadores() {
-        return investidoresObservadores;
+    public void setValorAtual(BigDecimal valorAtual) {
+        this.valorAtual = valorAtual;
+    }
+
+    public List<UsuarioInvestidor> getObservadores() {
+        return observadores;
     }
 }

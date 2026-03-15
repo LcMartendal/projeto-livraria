@@ -1,22 +1,22 @@
 package br.furb.models;
 
-import br.furb.enuns.TipoOrdem;
+import br.furb.models.enums.TipoOrdem;
 
 import java.math.BigDecimal;
 
 public class Ordem {
-    private String nomeInvestidor;
+    private UsuarioInvestidor investidor;
     private TipoOrdem tipoOrdem;
     private BigDecimal valor;
 
     public Ordem(String nomeInvestidor, TipoOrdem tipoOrdem, BigDecimal valor) {
-        this.nomeInvestidor = nomeInvestidor;
+        this.investidor = new UsuarioInvestidor(nomeInvestidor);
         this.tipoOrdem = tipoOrdem;
         this.valor = valor;
     }
 
-    public String getNomeInvestidor() {
-        return nomeInvestidor;
+    public UsuarioInvestidor getInvestidor() {
+        return investidor;
     }
 
     public TipoOrdem getTipoOrdem() {
