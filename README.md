@@ -1,204 +1,156 @@
-# 📚 Sistema de Cálculo de Frete - Livraria
+# 📈 Simulador de Bolsa de Valores - Problema 2
 
-![Java](https://img.shields.io/badge/Java-19-orange)
-![Maven](https://img.shields.io/badge/Maven-Build-blue)
-![JUnit](https://img.shields.io/badge/JUnit-5-green)
-![Status](https://img.shields.io/badge/status-concluído-success)
-
-Sistema desenvolvido para uma **livraria que deseja iniciar suas vendas pela internet**, permitindo calcular automaticamente o **valor do frete de pedidos** com base no **peso total dos produtos** e na **modalidade de entrega escolhida**.
-
-O projeto foi desenvolvido aplicando **boas práticas de engenharia de software**, arquitetura limpa e testes automatizados.
+Projeto desenvolvido para a disciplina de **Análise de Algoritmos** da FURB.
 
 ---
 
-# 🎯 Objetivo do Projeto
+## 👥 Integrantes
 
-Criar um sistema que permita ao dono da livraria calcular o valor do frete de um pedido contendo diversos produtos, considerando diferentes modalidades de entrega.
-
-Além disso, o projeto busca demonstrar:
-
-- aplicação de **Clean Code**
-- princípios **SOLID**
-- uso de **Design Patterns**
-- criação de **testes unitários**
-- organização de **arquitetura de software**
+* Fabian Formento
+* Lucas Visconti
+* Luiz C. Martendal
 
 ---
 
-# 🏗 Arquitetura do Sistema
+## 📌 Descrição
 
-O sistema foi estruturado em camadas para garantir **baixo acoplamento e alta coesão**.
+Este projeto implementa uma simulação de uma bolsa de valores, permitindo que investidores realizem operações de compra e venda de ações, além de receber notificações em tempo real sobre mudanças de preço.
 
-```
-src
-├── main
-│ └── java
-│ └── org.example
-│ ├── model
-│ │ ├── Produto
-│ │ └── Pedido
-│ │
-│ ├── frete
-│ │ ├── TipoFrete
-│ │ ├── PACFrete
-│ │ ├── SedexFrete
-│ │ └── RetiradaLojaFrete
-│ │
-│ ├── service
-│ │ └── CalculadoraFrete
-│ │
-│ └── validator
-│ ├── Validador<T>
-│ ├── ProdutoValidator
-│ ├── PesoValidator
-│ └── PrecoValidator
-│
-└── test
-└── java
-└── org.example
-└── testes unitários
-```
+O sistema processa automaticamente ordens de compra e venda, realizando negociações quando há compatibilidade entre elas (*matching*).
 
 ---
 
-# 🧠 Padrões de Projeto Utilizados
+## ⚙️ Funcionalidades
 
-## Strategy Pattern
+✔️ Cadastro de ações
+✔️ Registro de ordens de compra e venda
+✔️ Processamento automático de negociações
+✔️ Atualização do valor das ações
+✔️ Notificação de investidores inscritos
+✔️ Validação de dados de entrada
+✔️ Testes unitários
 
-O cálculo do frete utiliza o **Strategy Pattern**, permitindo que cada tipo de frete possua sua própria regra de cálculo.
+---
 
-Isso permite **adicionar novos tipos de frete sem modificar o código existente**, seguindo o princípio **Open/Closed (SOLID)**.
+## 🧠 Regras de Negociação
 
-Exemplo da interface:
+Uma negociação ocorre quando:
 
-```java
-public interface TipoFrete {
-    double calcular(double pesoTotal);
-}
+* O valor da melhor ordem de compra é **maior ou igual** ao valor da melhor ordem de venda
+
+Quando isso acontece:
+
+1. A negociação é executada
+2. O valor da ação é atualizado com base no preço de venda
+3. As ordens são removidas
+4. Investidores inscritos são notificados
+
+---
+
+## 🏗️ Arquitetura
+
+O sistema foi dividido em camadas para melhor organização:
+
+```text
+models      → entidades do domínio
+services    → regras de negócio
+validators  → validação de dados
 ```
 
 ---
 
-# 📦 Regras de Cálculo de Frete
+## 🧩 Padrões e Boas Práticas
 
-## 🚚 PAC
-
-Peso do Pedido Valor
-Até 1kg R$ 10,00
-1kg a 2kg R$ 15,00
-Acima de 2kg Não permitido
-
-## ⚡ SEDEX
-
-Peso do Pedido Valor
-Até 500g R$ 12,50
-500g a 1kg R$ 20,00
-Acima de 1kg R$ 46,50 + R$ 1,50 para cada 100g adicional
-
-## 🏪 Retirada na Loja
-
-Tipo Valor
-Retirada no local Grátis
-
-# 🔎 Validação de Dados
-
-## O projeto utiliza uma interface genérica de validação para garantir reutilização e consistência nas regras de validação.
-
-```java
-public interface Validador<T> {
-    void validar(T valor);
-}
-```
-
-## Implementações:
-
-```java
-ProdutoValidator
-PesoValidator
-PrecoValidator
-```
-
-Essa abordagem permite criar novas validações sem alterar o código existente.
+* **Observer Pattern** → notificação de investidores
+* **Separation of Concerns** → separação clara de responsabilidades
+* **Encapsulamento** → controle de acesso aos dados
+* **Imutabilidade parcial** → uso de atributos `final`
+* **Validação dedicada** → classes específicas para validação
 
 ---
 
-# 🧪 Testes Automatizados
+## ⚡ Estruturas Utilizadas
 
-O sistema possui testes unitários utilizando JUnit 5.
-
-Os testes seguem boas práticas de organização:
-
-@Nested para agrupar cenários
-
-@DisplayName para documentação dos testes
-
-cobertura de múltiplos cenários
-
-## Tipos de testes realizados
-
-Casos válidos
-
-Casos inválidos
-
-Boundary values
-
-Testes de robustez
-
-Testes de segurança de entrada
-
-### Exemplo de teste:
-
-```java
-@Nested
-@DisplayName("Validação de nome do produto")
-class ProdutoValidatorTest {
-
-    @Test
-    @DisplayName("Deve lançar exceção quando nome for nulo")
-    void deveFalharQuandoNomeForNulo() {
-        assertThrows(IllegalArgumentException.class,
-            () -> validator.validar(null));
-    }
-
-}
-```
+* `List` para armazenamento de ordens
+* `Stream API` para busca da melhor compra/venda
+* `BigDecimal` para precisão em valores monetários
 
 ---
 
-# ⚙️ Tecnologias Utilizadas
-## Tecnologia	Descrição
+## 🔄 Fluxo do Sistema
 
-Java 19	          Linguagem principal
-Maven	          Gerenciamento de dependências
-JUnit 5	          Framework de testes
+1. Investidor cria uma ordem
+2. Ordem é associada a uma ação
+3. Sistema tenta realizar *matching*
+4. Se houver negociação:
 
----
-
-# ▶️ Como Executar o Projeto
-Pré-requisitos
-
-Java 19 ou superior
-
-Maven
-
-### Compilar o projeto
-```
-mvn clean install
-```
-
-### Executar os testes
-```
-mvn test
-```
+   * valor da ação é atualizado
+   * investidores são notificados
 
 ---
 
-# 👨‍💻 Autores
+## 🧪 Testes Unitários
 
-Luiz C. Martendal
+Foram implementados testes para validar:
 
-Fabian Formento
+✔️ Execução de match
+✔️ Não ocorrência de match inválido
+✔️ Atualização correta do valor
+✔️ Validação de entradas
+✔️ Notificação de investidores
 
-Lucas Visconti
+---
 
-Estudantes de Ciência da Computação — FURB
+## ▶️ Como Executar
+
+1. Clone o repositório:
+
+```bash
+git clone https://github.com/LcMartendal/trabalhos-analise-de-algoritmos.git
+```
+
+2. Acesse a branch:
+
+```bash
+git checkout problema-2-pt-1
+```
+
+3. Execute os testes na sua IDE ou via Maven/Gradle.
+
+---
+
+## 📊 Diagrama UML
+
+O projeto inclui um diagrama de classes UML representando a estrutura completa da aplicação, incluindo entidades, serviços e validadores.
+
+---
+
+## 🎯 Objetivo Acadêmico
+
+Aplicar conceitos de:
+
+* Programação Orientada a Objetos
+* Estruturas de dados
+* Modelagem UML
+* Arquitetura de software
+* Testes automatizados
+
+---
+
+## 📎 Observações
+
+* Sistema simplificado (não considera volume de ações)
+* Foco na lógica de negociação e arquitetura
+* Implementação voltada para fins acadêmicos
+
+---
+
+## 🚀 Status
+
+✔️ Implementação concluída
+✔️ Arquitetura organizada
+✔️ Validações implementadas
+✔️ Testes unitários implementados
+✔️ Diagrama UML criado
+
+---
