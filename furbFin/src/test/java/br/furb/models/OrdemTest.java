@@ -1,8 +1,7 @@
 package br.furb.models;
 
 import br.furb.models.enums.TipoOrdem;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 
@@ -13,14 +12,10 @@ class OrdemTest {
 
     @Test
     void deveCriarOrdemCorretamente() {
+        var investidor = new UsuarioInvestidor("Joao");
+        Ordem ordem = new Ordem(investidor, TipoOrdem.COMPRA, new BigDecimal("50"));
 
-        Ordem ordem = new Ordem(
-                "joao",
-                TipoOrdem.COMPRA,
-                new BigDecimal("50")
-        );
-
-        assertEquals("joao", ordem.getInvestidor().getNome());
+        assertEquals("Joao", ordem.getInvestidor().getNome());
         assertEquals(TipoOrdem.COMPRA, ordem.getTipoOrdem());
         assertEquals(new BigDecimal("50"), ordem.getValor());
     }

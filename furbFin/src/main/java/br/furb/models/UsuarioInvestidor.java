@@ -1,11 +1,16 @@
 package br.furb.models;
 
+import br.furb.validators.UsuarioInvestidorValidator;
+
 import java.math.BigDecimal;
 
 public class UsuarioInvestidor {
-    private String nome;
+    private final String nome;
 
     public UsuarioInvestidor(String nome) {
+        UsuarioInvestidorValidator validator = new UsuarioInvestidorValidator();
+        validator.validar(nome);
+
         this.nome = nome;
     }
 

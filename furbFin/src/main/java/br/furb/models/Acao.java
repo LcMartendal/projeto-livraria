@@ -1,31 +1,29 @@
 package br.furb.models;
 
+import br.furb.validators.AcaoValidator;
+
 import java.math.BigDecimal;
 import java.util.*;
 
 public class Acao {
 
-    private String nome;
+    private final String nome;
     private BigDecimal valorAtual;
 
-    private PriorityQueue<Ordem> compras;
-    private PriorityQueue<Ordem> vendas;
-
-    private List<UsuarioInvestidor> observadores = new ArrayList<>();
+    private final List<Ordem> compras = new ArrayList<>();
+    private final List<Ordem> vendas = new ArrayList<>();
+    private final List<UsuarioInvestidor> observadores = new ArrayList<>();
 
     public Acao(String nome, BigDecimal valorInicial) {
+        AcaoValidator validator = new AcaoValidator();
+        validator.validar(nome, valorInicial);
 
-        this.nome = nome;
-        this.valorAtual = valorInicial;
+        this.nome = Objects.requireNonNull(nome);
+        this.valorAtual = Objects.requireNonNull(valorInicial);
+    }
 
-        compras = new PriorityQueue<>(
-                (o1, o2) -> o2.getValor().compareTo(o1.getValor())
-        );
-
-        vendas = new PriorityQueue<>(
-                (o1, o2) -> o2.getValor().compareTo(o1.getValor())
-        );
-
+    public void adicionarOrdem(Ordem ordem) {
+        ordem.adicionarNaAcao(this);
     }
 
     public void adicionarCompra(Ordem ordem) {
@@ -36,32 +34,36 @@ public class Acao {
         vendas.add(ordem);
     }
 
-    public Ordem melhorCompra() {
-        return compras.peek();
+    public Optional<Ordem> melhorCompra() {
+        return compras.stream().max(Comparator.comparing(Ordem::getValor));
     }
 
-    public Ordem melhorVenda() {
-        return vendas.peek();
+    public Optional<Ordem> melhorVenda() {
+        return vendas.stream().min(Comparator.comparing(Ordem::getValor));
     }
 
     public Ordem removerMelhorCompra() {
-        return compras.poll();
+        Ordem melhor = melhorCompra().orElse(null);
+        if (melhor != null) compras.remove(melhor);
+        return melhor;
     }
 
     public Ordem removerMelhorVenda() {
-        return vendas.poll();
+        Ordem melhor = melhorVenda().orElse(null);
+        if (melhor != null) vendas.remove(melhor);
+        return melhor;
     }
 
-    public boolean temCompras() {
-        return !compras.isEmpty();
-    }
-
-    public boolean temVendas() {
-        return !vendas.isEmpty();
+    public boolean temOrdens() {
+        return !compras.isEmpty() && !vendas.isEmpty();
     }
 
     public void registrarInvestidor(UsuarioInvestidor investidor) {
         observadores.add(investidor);
+    }
+
+    public List<UsuarioInvestidor> getObservadores() {
+        return Collections.unmodifiableList(observadores);
     }
 
     public String getNome() {
@@ -72,11 +74,8 @@ public class Acao {
         return valorAtual;
     }
 
-    public void setValorAtual(BigDecimal valorAtual) {
-        this.valorAtual = valorAtual;
-    }
-
-    public List<UsuarioInvestidor> getObservadores() {
-        return observadores;
+    public void atualizarValor(BigDecimal novoValor) {
+        this.valorAtual = novoValor;
+        observadores.forEach(i -> i.notificar(nome, valorAtual));
     }
 }

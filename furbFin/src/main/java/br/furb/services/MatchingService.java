@@ -9,31 +9,22 @@ public class MatchingService {
 
     private final NotificacaoService notificacaoService;
 
-    public MatchingService() {
-        this.notificacaoService = new NotificacaoService();
+    public MatchingService(NotificacaoService notificacaoService) {
+        this.notificacaoService = notificacaoService;
     }
 
     public void processar(Acao acao) {
+        while (acao.temOrdens()) {
+            Ordem compra = acao.melhorCompra().orElseThrow();
+            Ordem venda = acao.melhorVenda().orElseThrow();
 
-        while (acao.temCompras() && acao.temVendas()) {
-
-            Ordem melhorCompra = acao.melhorCompra();
-            Ordem melhorVenda = acao.melhorVenda();
-
-            if (melhorCompra.getValor().compareTo(melhorVenda.getValor()) == 0) {
-
-                BigDecimal novoValor = melhorVenda.getValor();
-
-                acao.setValorAtual(novoValor);
+            if (compra.getValor().compareTo(venda.getValor()) >= 0) {
+                BigDecimal precoExecucao = venda.getValor();
+                acao.atualizarValor(precoExecucao);
 
                 acao.removerMelhorCompra();
                 acao.removerMelhorVenda();
-
-                notificacaoService.notificar(acao);
-
-            } else {
-                break;
-            }
+            } else break;
         }
     }
 }

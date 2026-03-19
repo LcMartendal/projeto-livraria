@@ -4,9 +4,7 @@ import br.furb.models.Acao;
 import br.furb.models.Ordem;
 import br.furb.models.UsuarioInvestidor;
 import br.furb.models.enums.TipoOrdem;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.math.BigDecimal;
 
@@ -15,41 +13,61 @@ import static org.junit.jupiter.api.Assertions.*;
 @DisplayName("Testes BolsaDeValoresService")
 class BolsaDeValoresServiceTest {
 
+    private BolsaDeValoresService bolsa;
+    private Acao acao;
+
+    @BeforeEach
+    void setup() {
+        NotificacaoService notificacaoService = new NotificacaoService();
+        MatchingService matchingService = new MatchingService(notificacaoService);
+        bolsa = new BolsaDeValoresService(matchingService);
+
+        acao = new Acao("PETR4", new BigDecimal("10"));
+        bolsa.adicionarAcao(acao);
+    }
+
     @Nested
+    @DisplayName("Registro de ordens")
     class RegistroOrdem {
 
         @Test
         void deveRegistrarOrdemCompra() {
-
-            BolsaDeValoresService bolsa = new BolsaDeValoresService();
-
-            Acao acao = new Acao("PETR4", new BigDecimal("10"));
-            bolsa.adicionarAcao(acao);
-
             Ordem ordem = new Ordem(
-                    "Ana",
+                    new UsuarioInvestidor("Ana"),
                     TipoOrdem.COMPRA,
                     new BigDecimal("20")
             );
 
             bolsa.registrarOrdem("PETR4", ordem);
 
-            assertTrue(acao.temCompras());
+            assertTrue(acao.melhorCompra().isPresent());
+            assertEquals(ordem, acao.melhorCompra().get());
+        }
+
+        @Test
+        void deveRegistrarOrdemVenda() {
+            Ordem ordem = new Ordem(
+                    new UsuarioInvestidor("Ana"),
+                    TipoOrdem.VENDA,
+                    new BigDecimal("25")
+            );
+
+            bolsa.registrarOrdem("PETR4", ordem);
+
+            assertTrue(acao.melhorVenda().isPresent());
+            assertEquals(ordem, acao.melhorVenda().get());
         }
 
         @Test
         void deveLancarErroQuandoAcaoNaoExiste() {
-
-            BolsaDeValoresService bolsa = new BolsaDeValoresService();
-
             Ordem ordem = new Ordem(
-                    "Ana",
+                    new UsuarioInvestidor("Ana"),
                     TipoOrdem.COMPRA,
                     new BigDecimal("20")
             );
 
             assertThrows(RuntimeException.class,
-                    () -> bolsa.registrarOrdem("PETR4", ordem));
+                    () -> bolsa.registrarOrdem("VALE3", ordem));
         }
     }
 }
