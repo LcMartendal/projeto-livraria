@@ -49,6 +49,6 @@ public class FuncoesArCondicionadoVentoBaumn extends ArCondicionadoVentoBaumn im
     //NÃO IMPLEMENTADO NA LIB
     @Override
     public boolean estaLigado() {
-        return false;
+        return super.estaLigado();
     }
 }
