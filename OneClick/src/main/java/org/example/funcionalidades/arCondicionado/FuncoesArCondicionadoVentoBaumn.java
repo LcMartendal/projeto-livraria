@@ -38,10 +38,8 @@ public class FuncoesArCondicionadoVentoBaumn extends ArCondicionadoVentoBaumn im
 
     @Override
     public void definirTemperatura(int temperatura) {
-        try {
+        if (temperatura >= 15 && temperatura <= 35) {
             super.definirTemperatura(temperatura);
-        } catch (Exception e) {
-            // Aparelho desligado ou temperatura fora do range 15-35
         }
     }
 

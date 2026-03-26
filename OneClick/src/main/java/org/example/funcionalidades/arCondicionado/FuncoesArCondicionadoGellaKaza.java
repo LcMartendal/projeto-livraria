@@ -30,18 +30,12 @@ public class FuncoesArCondicionadoGellaKaza extends ArCondicionadoGellaKaza impl
      */
     @Override
     public void definirTemperatura(int temperatura) {
-        if (!estaLigado()) {
-            ligar();
-        }
-        int atual = getTemperatura();
-        while (atual < temperatura) {
-            super.aumentarTemperatura();
-            atual++;
-        }
-        while (atual > temperatura) {
-            super.diminuirTemperatura();
-            atual--;
-        }
+        int diff = temperatura - getTemperatura();
 
+        if (diff > 0) {
+            for (int i = 0; i < diff; i++) aumentarTemperatura();
+        } else {
+            for (int i = 0; i < -diff; i++) diminuirTemperatura();
+        }
     }
 }
