@@ -1,204 +1,74 @@
-# 📚 Sistema de Cálculo de Frete - Livraria
+# 🖱️ OneClick - Automação de Dispositivos IoT (Problema 3)
 
-![Java](https://img.shields.io/badge/Java-19-orange)
-![Maven](https://img.shields.io/badge/Maven-Build-blue)
-![JUnit](https://img.shields.io/badge/JUnit-5-green)
-![Status](https://img.shields.io/badge/status-concluído-success)
+Projeto desenvolvido para a disciplina de **Análise de Algoritmos** da FURB. O sistema foca na gestão eficiente de comandos e estados de dispositivos inteligentes via rede, utilizando uma biblioteca de integração de hardware.
 
-Sistema desenvolvido para uma **livraria que deseja iniciar suas vendas pela internet**, permitindo calcular automaticamente o **valor do frete de pedidos** com base no **peso total dos produtos** e na **modalidade de entrega escolhida**.
+## 👥 Integrantes
 
-O projeto foi desenvolvido aplicando **boas práticas de engenharia de software**, arquitetura limpa e testes automatizados.
-
----
-
-# 🎯 Objetivo do Projeto
-
-Criar um sistema que permita ao dono da livraria calcular o valor do frete de um pedido contendo diversos produtos, considerando diferentes modalidades de entrega.
-
-Além disso, o projeto busca demonstrar:
-
-- aplicação de **Clean Code**
-- princípios **SOLID**
-- uso de **Design Patterns**
-- criação de **testes unitários**
-- organização de **arquitetura de software**
+* Fabian Formento
+* Lucas Visconti
+* Luiz Carlos Martendal
 
 ---
 
-# 🏗 Arquitetura do Sistema
+## 📌 Descrição
 
-O sistema foi estruturado em camadas para garantir **baixo acoplamento e alta coesão**.
+O **OneClick** é um ecossistema de controle para dispositivos IoT (Internet of Things). O projeto visa gerenciar a comunicação entre uma central de controle e diversos sensores/atuadores, permitindo:
 
-```
-src
-├── main
-│ └── java
-│ └── org.example
-│ ├── model
-│ │ ├── Produto
-│ │ └── Pedido
-│ │
-│ ├── frete
-│ │ ├── TipoFrete
-│ │ ├── PACFrete
-│ │ ├── SedexFrete
-│ │ └── RetiradaLojaFrete
-│ │
-│ ├── service
-│ │ └── CalculadoraFrete
-│ │
-│ └── validator
-│ ├── Validador<T>
-│ ├── ProdutoValidator
-│ ├── PesoValidator
-│ └── PrecoValidator
-│
-└── test
-└── java
-└── org.example
-└── testes unitários
-```
+* O registro e monitoramento de dispositivos em tempo real.
+* O envio de comandos prioritários (ligar, desligar, configurar).
+* A integração com a biblioteca robusta de dispositivos `LibDispositivosIot`.
+
+Quando um dispositivo altera seu estado ou um sensor detecta uma variação, o sistema processa a informação e propaga a atualização para os módulos de monitoramento conectados.
 
 ---
 
-# 🧠 Padrões de Projeto Utilizados
+## ⚙️ Funcionalidades
 
-## Strategy Pattern
-
-O cálculo do frete utiliza o **Strategy Pattern**, permitindo que cada tipo de frete possua sua própria regra de cálculo.
-
-Isso permite **adicionar novos tipos de frete sem modificar o código existente**, seguindo o princípio **Open/Closed (SOLID)**.
-
-Exemplo da interface:
-
-```java
-public interface TipoFrete {
-    double calcular(double pesoTotal);
-}
-```
+✔️ Cadastro e descoberta de novos dispositivos IoT.
+✔️ Envio de comandos "OneClick" para execução imediata.
+✔️ Processamento de filas de mensagens de sensores.
+✔️ Integração nativa com a biblioteca externa `LibDispositivosIot-1.0.jar`.
+✔️ Sistema de logs de eventos e telemetria para análise de performance.
+✔️ Testes unitários de latência e processamento de dados.
 
 ---
 
-# 📦 Regras de Cálculo de Frete
+## 🧠 Regras de Operação
 
-## 🚚 PAC
+O sistema gerencia os dispositivos seguindo este fluxo lógico:
 
-Peso do Pedido Valor
-Até 1kg R$ 10,00
-1kg a 2kg R$ 15,00
-Acima de 2kg Não permitido
-
-## ⚡ SEDEX
-
-Peso do Pedido Valor
-Até 500g R$ 12,50
-500g a 1kg R$ 20,00
-Acima de 1kg R$ 46,50 + R$ 1,50 para cada 100g adicional
-
-## 🏪 Retirada na Loja
-
-Tipo Valor
-Retirada no local Grátis
-
-# 🔎 Validação de Dados
-
-## O projeto utiliza uma interface genérica de validação para garantir reutilização e consistência nas regras de validação.
-
-```java
-public interface Validador<T> {
-    void validar(T valor);
-}
-```
-
-## Implementações:
-
-```java
-ProdutoValidator
-PesoValidator
-PrecoValidator
-```
-
-Essa abordagem permite criar novas validações sem alterar o código existente.
+1. **Priorização**: Comandos críticos (ex: alarmes) possuem maior prioridade na fila de execução do que comandos de rotina.
+2. **Sincronização de Estado**: O estado do objeto no sistema deve ser um reflexo fiel do hardware fornecido pela `LibDispositivosIot`.
+3. **Gerenciamento de Timeouts**: Comandos que excedem o tempo limite de resposta da rede são descartados para evitar comportamentos inesperados.
 
 ---
 
-# 🧪 Testes Automatizados
+## 🧩 Tecnologias e Padrões
 
-O sistema possui testes unitários utilizando JUnit 5.
+Java 17: Versão de destino configurada no Maven.
 
-Os testes seguem boas práticas de organização:
+Maven: Gerenciamento de dependências e automação de build.
 
-@Nested para agrupar cenários
+Command Pattern: Utilizado para encapsular cada ação do usuário como um objeto "Click".
 
-@DisplayName para documentação dos testes
+Observer Pattern: Utilizado para que a central reaja a mudanças enviadas pelos sensores IoT.
 
-cobertura de múltiplos cenários
+## 🛠️ Configuração de Dependências
+O projeto utiliza uma dependência de sistema local. Certifique-se de que o arquivo JAR está no caminho correto para que o Maven possa compilar o projeto:
 
-## Tipos de testes realizados
+Caminho esperado:
+src/main/resources/LibDispositivosIot-1.0.jar
 
-Casos válidos
+Trecho do pom.xml:
 
-Casos inválidos
-
-Boundary values
-
-Testes de robustez
-
-Testes de segurança de entrada
-
-### Exemplo de teste:
-
-```java
-@Nested
-@DisplayName("Validação de nome do produto")
-class ProdutoValidatorTest {
-
-    @Test
-    @DisplayName("Deve lançar exceção quando nome for nulo")
-    void deveFalharQuandoNomeForNulo() {
-        assertThrows(IllegalArgumentException.class,
-            () -> validator.validar(null));
-    }
-
-}
+```XML
+<dependency>
+    <groupId>br.furb.analise.algoritmos</groupId>
+    <artifactId>LibDispositivosIot</artifactId>
+    <version>1.0-SNAPSHOT</version>
+</dependency>
 ```
-
 ---
 
-# ⚙️ Tecnologias Utilizadas
-## Tecnologia	Descrição
-
-Java 19	          Linguagem principal
-Maven	          Gerenciamento de dependências
-JUnit 5	          Framework de testes
-
----
-
-# ▶️ Como Executar o Projeto
-Pré-requisitos
-
-Java 19 ou superior
-
-Maven
-
-### Compilar o projeto
-```
-mvn clean install
-```
-
-### Executar os testes
-```
-mvn test
-```
-
----
-
-# 👨‍💻 Autores
-
-Luiz C. Martendal
-
-Fabian Formento
-
-Lucas Visconti
-
-Estudantes de Ciência da Computação — FURB
+## 📚 Referência
+Trabalho proposto na disciplina de Análise de Algoritmos — FURB.
