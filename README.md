@@ -43,29 +43,6 @@ O sistema gerencia os dispositivos seguindo este fluxo lógico:
 
 ---
 
-## 🏗️ Estrutura do Projeto
-
-```text
-org.example (OneClick)
-│
-├── core
-│   ├── Dispositivo (Classe abstrata)
-│   ├── Sensor
-│   ├── Atuador
-│   └── enums
-│       └── StatusConexao
-│
-├── services
-│   ├── GerenciadorIotService (Orquestrador)
-│   ├── AgendadorComandosService (Fila de execução)
-│   └── TelemetriaService (Coleta de métricas)
-│
-└── lib (Dependência Local)
-    └── LibDispositivosIot-1.0.jar
-```
-
----
-
 ## 🧩 Tecnologias e Padrões
 
 Java 17: Versão de destino configurada no Maven.
@@ -88,9 +65,7 @@ Trecho do pom.xml:
 <dependency>
     <groupId>br.furb.analise.algoritmos</groupId>
     <artifactId>LibDispositivosIot</artifactId>
-    <version>1.0</version>
-    <scope>system</scope>
-    <systemPath>${basedir}/src/main/resources/LibDispositivosIot-1.0.jar</systemPath>
+    <version>1.0-SNAPSHOT</version>
 </dependency>
 ```
 ---
