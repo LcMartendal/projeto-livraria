@@ -1,14 +1,17 @@
 package br.furb.analise.algoritmos;
 
 public class PersianaSolarius {
-
     private boolean aberta;
 
-    public void abrir() {
+    public PersianaSolarius() {
         aberta = true;
     }
 
-    public void fechar() {
+    public void subirPersiana() {
+        aberta = true;
+    }
+
+    public void descerPersiana() {
         aberta = false;
     }
 

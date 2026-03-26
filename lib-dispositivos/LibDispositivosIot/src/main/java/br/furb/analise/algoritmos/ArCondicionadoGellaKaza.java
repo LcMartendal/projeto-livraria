@@ -1,24 +1,38 @@
 package br.furb.analise.algoritmos;
 
 public class ArCondicionadoGellaKaza {
-
     private boolean ligado;
     private int temperatura;
 
-    public void ligar() {
+    public ArCondicionadoGellaKaza() {
+        ligado = false;
+        temperatura = 28;
+    }
+
+    public void ativar() {
         ligado = true;
     }
 
-    public void desligar() {
+    public void desativar() {
         ligado = false;
     }
 
-    public void definirTemperatura(int temperatura) {
-        if (temperatura < 18 || temperatura > 28) {
-            throw new IllegalArgumentException("Temperatura inválida");
+    public void aumentarTemperatura() {
+        if (temperatura+1 > 35) {
+            throw new IllegalArgumentException("Limite de temperatura atingido 35");
         }
-        this.temperatura = temperatura;
+
+        temperatura++;
     }
+
+    public void diminuirTemperatura() {
+        if (temperatura-1 < 15) {
+            throw new IllegalArgumentException("Limite de temperatura atingido 15");
+        }
+
+        temperatura--;
+    }
+
 
     public int getTemperatura() {
         return temperatura;

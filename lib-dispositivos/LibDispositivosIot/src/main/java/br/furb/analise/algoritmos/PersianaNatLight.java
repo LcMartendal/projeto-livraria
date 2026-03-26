@@ -1,25 +1,41 @@
 package br.furb.analise.algoritmos;
 
 public class PersianaNatLight {
+    private boolean palhetaAberta;
+    private boolean palhetaErguida;
 
-    private int abertura; // 0 a 100
-
-    public void abrir() {
-        abertura = 100;
+    public PersianaNatLight() {
+        palhetaAberta = true;
+        palhetaErguida = true;
     }
 
-    public void fechar() {
-        abertura = 0;
+    public void descerPalheta() {
+        palhetaErguida = false;
     }
 
-    public void definirAbertura(int abertura) {
-        if (abertura < 0 || abertura > 100) {
-            throw new IllegalArgumentException("Abertura inválida");
+    public void subirPalheta() throws Exception {
+        if (!palhetaAberta) {
+            throw new Exception("Palheta deve estar aberta pare subir a persiana");
         }
-        this.abertura = abertura;
+        palhetaErguida = true;
     }
 
-    public int getAbertura() {
-        return abertura;
+    public void abrirPalheta() {
+        palhetaAberta = true;
+    }
+
+    public void fecharPalheta() throws Exception {
+        if (palhetaErguida) {
+            throw new Exception("Palheta não pode ser fechada com a persiana erguida");
+        }
+        palhetaAberta = false;
+    }
+
+    public boolean estaPalhetaAberta() {
+        return palhetaAberta;
+    }
+
+    public boolean estaPalhetaErguida() {
+        return palhetaErguida;
     }
 }
