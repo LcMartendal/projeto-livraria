@@ -1,6 +1,6 @@
-# 📈 Simulador de Bolsa de Valores - Problema 2
+# 🖱️ OneClick - Automação de Dispositivos IoT (Problema 3)
 
-Projeto desenvolvido para a disciplina de **Análise de Algoritmos** da FURB.
+Projeto desenvolvido para a disciplina de **Análise de Algoritmos** da FURB. O sistema foca na gestão eficiente de comandos e estados de dispositivos inteligentes via rede, utilizando uma biblioteca de integração de hardware.
 
 ## 👥 Integrantes
 
@@ -12,87 +12,88 @@ Projeto desenvolvido para a disciplina de **Análise de Algoritmos** da FURB.
 
 ## 📌 Descrição
 
-Este projeto simula o funcionamento básico de uma bolsa de valores, onde investidores podem:
+O **OneClick** é um ecossistema de controle para dispositivos IoT (Internet of Things). O projeto visa gerenciar a comunicação entre uma central de controle e diversos sensores/atuadores, permitindo:
 
-* Registrar ordens de **compra** e **venda** de ações
-* Se inscrever em ações para receber atualizações de preço
-* Ter suas ordens processadas automaticamente pelo sistema
+* O registro e monitoramento de dispositivos em tempo real.
+* O envio de comandos prioritários (ligar, desligar, configurar).
+* A integração com a biblioteca robusta de dispositivos `LibDispositivosIot`.
 
-Quando ocorre um *match* entre uma ordem de compra e uma ordem de venda, a negociação é realizada, o valor da ação é atualizado e os investidores inscritos são notificados.
+Quando um dispositivo altera seu estado ou um sensor detecta uma variação, o sistema processa a informação e propaga a atualização para os módulos de monitoramento conectados.
 
 ---
 
 ## ⚙️ Funcionalidades
 
-✔️ Cadastro de ações
-✔️ Registro de ordens de compra e venda
-✔️ Processamento automático de ordens (matching)
-✔️ Atualização do valor da ação após negociação
-✔️ Notificação de investidores (Observer)
-✔️ Testes unitários
+✔️ Cadastro e descoberta de novos dispositivos IoT.
+✔️ Envio de comandos "OneClick" para execução imediata.
+✔️ Processamento de filas de mensagens de sensores.
+✔️ Integração nativa com a biblioteca externa `LibDispositivosIot-1.0.jar`.
+✔️ Sistema de logs de eventos e telemetria para análise de performance.
+✔️ Testes unitários de latência e processamento de dados.
 
 ---
 
-## 🧠 Regras de Negociação
+## 🧠 Regras de Operação
 
-O sistema realiza o *match* quando:
+O sistema gerencia os dispositivos seguindo este fluxo lógico:
 
-* O valor da melhor ordem de compra é **igual** que o valor da melhor ordem de venda
-
-Quando isso acontece:
-
-1. A negociação é realizada
-2. O valor da ação é atualizado
-3. As ordens são removidas
-4. Investidores inscritos são notificados
+1. **Priorização**: Comandos críticos (ex: alarmes) possuem maior prioridade na fila de execução do que comandos de rotina.
+2. **Sincronização de Estado**: O estado do objeto no sistema deve ser um reflexo fiel do hardware fornecido pela `LibDispositivosIot`.
+3. **Gerenciamento de Timeouts**: Comandos que excedem o tempo limite de resposta da rede são descartados para evitar comportamentos inesperados.
 
 ---
 
 ## 🏗️ Estrutura do Projeto
 
-```
-br.furb
+```text
+org.example (OneClick)
 │
-├── models
-│   ├── Acao
-│   ├── Ordem
-│   ├── UsuarioInvestidor
+├── core
+│   ├── Dispositivo (Classe abstrata)
+│   ├── Sensor
+│   ├── Atuador
 │   └── enums
-│       └── TipoOrdem
+│       └── StatusConexao
 │
 ├── services
-│   ├── BolsaDeValoresService
-│   ├── MatchingService
-│   └── NotificacaoService
+│   ├── GerenciadorIotService (Orquestrador)
+│   ├── AgendadorComandosService (Fila de execução)
+│   └── TelemetriaService (Coleta de métricas)
+│
+└── lib (Dependência Local)
+    └── LibDispositivosIot-1.0.jar
 ```
 
 ---
 
-## 🧩 Padrões Utilizados
+## 🧩 Tecnologias e Padrões
 
-* **Observer Pattern** → notificação de investidores
-* **Separation of Concerns** → lógica dividida em serviços
-* **Priority Queue** → organização eficiente das ordens
+Java 17: Versão de destino configurada no Maven.
 
----
+Maven: Gerenciamento de dependências e automação de build.
 
-## ⚡ Estrutura de Dados
+Command Pattern: Utilizado para encapsular cada ação do usuário como um objeto "Click".
 
-O sistema utiliza:
+Observer Pattern: Utilizado para que a central reaja a mudanças enviadas pelos sensores IoT.
 
-* `PriorityQueue` para ordens de compra (maior valor primeiro)
-* `PriorityQueue` para ordens de venda (menor valor primeiro)
+## 🛠️ Configuração de Dependências
+O projeto utiliza uma dependência de sistema local. Certifique-se de que o arquivo JAR está no caminho correto para que o Maven possa compilar o projeto:
 
-Isso garante que as melhores ordens sejam processadas primeiro.
+Caminho esperado:
+src/main/resources/LibDispositivosIot-1.0.jar
 
----
+Trecho do pom.xml:
 
-## 📊 Diagrama de Classes
-
-O projeto possui um diagrama de classes em UML representando toda a estrutura da aplicação, conforme solicitado no enunciado.
-
+```XML
+<dependency>
+    <groupId>br.furb.analise.algoritmos</groupId>
+    <artifactId>LibDispositivosIot</artifactId>
+    <version>1.0</version>
+    <scope>system</scope>
+    <systemPath>${basedir}/src/main/resources/LibDispositivosIot-1.0.jar</systemPath>
+</dependency>
+```
 ---
 
 ## 📚 Referência
-
 Trabalho proposto na disciplina de Análise de Algoritmos — FURB.
