@@ -6,12 +6,12 @@ public class FuncoesArCondicionadoGellaKaza extends ArCondicionadoGellaKaza impl
 
     @Override
     public void ligar() {
-        super.ativar(); // GellaKaza usa ativar(), não ligar()
+        super.ativar();
     }
 
     @Override
     public void desligar() {
-        super.desativar(); // GellaKaza usa desativar(), não desligar()
+        super.desativar();
     }
 
     @Override
@@ -42,5 +42,6 @@ public class FuncoesArCondicionadoGellaKaza extends ArCondicionadoGellaKaza impl
             super.diminuirTemperatura();
             atual--;
         }
+
     }
 }
