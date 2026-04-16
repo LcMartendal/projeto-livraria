@@ -7,7 +7,7 @@ public class Q01CapacidadeInicial {
     private static final int TESTES = 10;
     private static final int ELEMENTOS = 100000;
 
-    public static void testar(int capacidade) {
+    private static Double testarCapacidadeinicial(int capacidade) {
         double soma = 0;
 
         for (int t = 0; t < TESTES; t++) {
@@ -23,53 +23,13 @@ public class Q01CapacidadeInicial {
             soma += (fim - inicio) / 1_000_000.0;
         }
 
-        System.out.println("*** QUESTÃO 01 EXERCICIO 02 ***");
-        System.out.println("----------------------------------");
-        System.out.println("Capacidade " + capacidade + ": " + (soma / TESTES) + " ms");
+        return soma / TESTES;
     }
 
     public static void teste() {
-        double somaListaComTamanhoIncial10 = 0;
-        double somaListaComTamanhoIncial1000 = 0;
-        double somaListaComTamanhoIncial1000000 = 0;
-
-        for (int t = 0; t < TESTES; t++) {
-            // --- Lista Com Tamanho Inicial 10
-            ArrayList<Integer> lista10 = new ArrayList<>(10);
-
-            long inicioTempoExecucaoLista10 = System.nanoTime();
-
-            for (int i = 0; i < ELEMENTOS; i++) {
-                lista10.add(i);
-            }
-
-            long fimTempoExecucaoLista10 = System.nanoTime();
-            somaListaComTamanhoIncial10 += (fimTempoExecucaoLista10 - inicioTempoExecucaoLista10) / 1_000_000.0;
-
-            // --- Lista Com Tamanho Inicial 1000
-            ArrayList<Integer> lista1000 = new ArrayList<>(1000);
-
-            long inicioTempoExecucaoLista1000 = System.nanoTime();
-
-            for (int i = 0; i < ELEMENTOS; i++) {
-                lista1000.add(i);
-            }
-
-            long fimTempoExecucaoLista1000 = System.nanoTime();
-            somaListaComTamanhoIncial1000 += (fimTempoExecucaoLista1000 - inicioTempoExecucaoLista1000) / 1_000_000.0;
-
-            // --- Lista Com Tamanho Inicial 1000000
-            ArrayList<Integer> lista1000000 = new ArrayList<>(1000000);
-
-            long inicioTempoExecucaoLista1000000 = System.nanoTime();
-
-            for (int i = 0; i < ELEMENTOS; i++) {
-                lista1000000.add(i);
-            }
-
-            long fimTempoExecucaoLista1000000 = System.nanoTime();
-            somaListaComTamanhoIncial1000000 += (fimTempoExecucaoLista1000000 - inicioTempoExecucaoLista1000000) / 1_000_000.0;
-        }
+        var somaListaComTamanhoIncial10 = testarCapacidadeinicial(10);
+        var somaListaComTamanhoIncial1000 = testarCapacidadeinicial(1000);
+        var somaListaComTamanhoIncial100000 = testarCapacidadeinicial(100000);
 
         System.out.println("*** QUESTÃO 01 EXERCICIO 02 ***");
         System.out.println("----------------------------------");
@@ -77,16 +37,16 @@ public class Q01CapacidadeInicial {
         System.out.println("---");
         System.out.println("Capacidade " + 1000 + ": " + (somaListaComTamanhoIncial1000 / TESTES) + " ms");
         System.out.println("---");
-        System.out.println("Capacidade " + 1000000 + ": " + (somaListaComTamanhoIncial1000000 / TESTES) + " ms");
+        System.out.println("Capacidade " + 100000 + ": " + (somaListaComTamanhoIncial100000 / TESTES) + " ms");
 
-        if (somaListaComTamanhoIncial10 < somaListaComTamanhoIncial1000000
-                && somaListaComTamanhoIncial1000 > somaListaComTamanhoIncial1000000) {
+        if (somaListaComTamanhoIncial10 < somaListaComTamanhoIncial100000
+                && somaListaComTamanhoIncial100000 > somaListaComTamanhoIncial1000) {
             System.out.println("ArrayList do tamanho inicial 10 é o mais rápido");
-        } else if (somaListaComTamanhoIncial1000 < somaListaComTamanhoIncial1000000
-                && somaListaComTamanhoIncial10 > somaListaComTamanhoIncial1000000) {
+        } else if (somaListaComTamanhoIncial1000 < somaListaComTamanhoIncial100000
+                && somaListaComTamanhoIncial10 > somaListaComTamanhoIncial100000) {
             System.out.println("ArrayList do tamanho inicial 1000 é o mais rápido");
         } else {
-            System.out.println("ArrayList do tamanho inicial 1000000 é o mais rápido");
+            System.out.println("ArrayList do tamanho inicial 100000 é o mais rápido");
         }
     }
 }
